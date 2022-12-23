@@ -4,13 +4,17 @@
         ]).
 
 
-build_index(OutputFile) ->
+
+
+build_index(BaseOutputFile) ->
     Path = code:lib_dir(nova_plugins, priv),
     {ok, Filenames} = file:list_dir(Path),
     Index = build_index(Path, Filenames),
     Binary = json:encode(Index, [maps, binary]),
+    Markdown = build_markdown(Index),
     io:format("Finished writing index. Indexed ~p modules~n", [length(Index)]),
-    file:write_file(OutputFile, [Binary]).
+    file:write_file(BaseOutputFile ++ ".json", [Binary]),
+    file:write_file(BaseOutputFile ++ ".md", [Markdown]).
 
 build_index(_Basepath, []) -> [];
 build_index(Basepath, [Filename|Tl]) ->
@@ -33,6 +37,34 @@ build_index(Basepath, [Filename|Tl]) ->
             build_index(Filename0, Filenames) ++ build_index(Basepath, Tl)
     end.
 
+build_markdown([]) -> [];
+build_markdown([Info|Tl]) ->
+    #{<<"name">> := Name,
+      <<"version">> := Version,
+      <<"description">> := Description,
+      <<"author">> := Author,
+      <<"options">> := Options} = Info,
+    MD = <<"### ", Name/binary, "\n",
+           "**Version**: ", Version/binary, "\n",
+           "**Author**: ", Author/binary, "\n",
+           "**Description**:\n",
+           Description/binary, "\n">>,
+    case Options of
+        [] ->
+            [<<MD/binary, "\n">>|build_markdown(Tl)];
+        _ ->
+            TableHeaders = <<"| Parameter | Description |\n| --- | --- |\n">>,
+            Options0 = generate_options(Options),
+            [MD, TableHeaders, Options0, "\n\n"|build_markdown(Tl)]
+    end.
+
+
+generate_options([]) -> [];
+generate_options([#{<<"key">> := Key, <<"description">> := Description}|Tl]) ->
+    io:format("~p~n~p~n", [Key, Description]),
+    KeyStr = erlang:atom_to_binary(Key),
+    Line = <<"| ", KeyStr/binary, " | ", Description/binary, " |\n">>,
+    [Line | generate_options(Tl)].
 
 transform_info({Name, Version, Author, Description, Options}) ->
     #{<<"name">> => Name,
