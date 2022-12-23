@@ -1,3 +1,8 @@
+# Plugins for Nova
+The following modules can be used as *plugins* for Nova.
+
+---
+
 ### nova_correlation_plugin
 **Version**: 0.1.0
 

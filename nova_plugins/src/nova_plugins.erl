@@ -3,18 +3,16 @@
          build_index/1
         ]).
 
-
-
-
 build_index(BaseOutputFile) ->
     Path = code:lib_dir(nova_plugins, priv),
     {ok, Filenames} = file:list_dir(Path),
     Index = build_index(Path, Filenames),
     Binary = json:encode(Index, [maps, binary]),
     Markdown = build_markdown(Index),
+    MarkdownHeader = "# Plugins for Nova\nThe following modules can be used as *plugins* for Nova.\n\n---\n\n",
     io:format("Finished writing index. Indexed ~p modules~n", [length(Index)]),
     file:write_file(BaseOutputFile ++ ".json", [Binary]),
-    file:write_file(BaseOutputFile ++ ".md", [Markdown]).
+    file:write_file(BaseOutputFile ++ ".md", [[MarkdownHeader] ++ Markdown]).
 
 build_index(_Basepath, []) -> [];
 build_index(Basepath, [Filename|Tl]) ->
