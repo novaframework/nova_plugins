@@ -1,14 +1,24 @@
 ### nova_correlation_plugin
 **Version**: 0.1.0
+
 **Author**: Nova team <info@novaframework.org
+
 **Description**:
+
 Add X-Correlation-ID headers to response
+
 
 ### nova_cors_plugin
 **Version**: 0.2.0
+
 **Author**: Nova team <info@novaframework.org
+
 **Description**:
+
 Add CORS headers to request
+
+**Options**:
+
 | Parameter | Description |
 | --- | --- |
 | allow_origins | Specifies which origins to insert into Access-Control-Allow-Origin |
@@ -16,9 +26,15 @@ Add CORS headers to request
 
 ### Nova body plugin
 **Version**: 0.0.1
+
 **Author**: Nova team <info@novaframework.org
+
 **Description**:
+
 This plugin modulates the body of a request.
+
+**Options**:
+
 | Parameter | Description |
 | --- | --- |
 | parse_bindings | Used to parse bindings and put them in state under `bindings` key |

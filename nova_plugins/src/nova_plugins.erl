@@ -45,15 +45,15 @@ build_markdown([Info|Tl]) ->
       <<"author">> := Author,
       <<"options">> := Options} = Info,
     MD = <<"### ", Name/binary, "\n",
-           "**Version**: ", Version/binary, "\n",
-           "**Author**: ", Author/binary, "\n",
-           "**Description**:\n",
-           Description/binary, "\n">>,
+           "**Version**: ", Version/binary, "\n\n",
+           "**Author**: ", Author/binary, "\n\n",
+           "**Description**:\n\n",
+           Description/binary, "\n\n">>,
     case Options of
         [] ->
             [<<MD/binary, "\n">>|build_markdown(Tl)];
         _ ->
-            TableHeaders = <<"| Parameter | Description |\n| --- | --- |\n">>,
+            TableHeaders = <<"**Options**:\n\n| Parameter | Description |\n| --- | --- |\n">>,
             Options0 = generate_options(Options),
             [MD, TableHeaders, Options0, "\n\n"|build_markdown(Tl)]
     end.
