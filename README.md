@@ -2,6 +2,10 @@
 
 This repository contains a collection of plugins that can be used with [Nova Framework](https://github.com/novaframework/nova).
 
+## Markdown version
+
+There's a markdown version of the index that can be found [here](index.md)
+
 ## Integration with rebar3_nova-plugin (Rebar plugin)
 
 TBA
